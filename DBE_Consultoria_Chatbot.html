@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consultoria 1:1 — Diego Bernal | DBE Investment Trust</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D1B2A;--navy-light:#162234;--gold:#C9A84C;--gold-light:#F0D78C;--cream:#FAF7F2;--white:#FFFFFF;--muted:#7A7A8A;--border:#E8E2D8;--teal:#1D7A6A;--success:#1A7A4A;--success-light:#E4F4EC;--bubble-bot:#F0EDE8;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;display:flex;flex-direction:column;align-items:center;}
+.header{width:100%;background:var(--navy);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;}
+.header-brand{font-family:'Playfair Display',serif;font-size:17px;color:var(--white);}
+.header-brand span{color:var(--gold);}
+.header-badge{font-size:11px;color:var(--gold);border:1px solid rgba(201,168,76,.4);padding:4px 10px;border-radius:20px;letter-spacing:1px;}
+.hero{width:100%;background:linear-gradient(135deg,var(--navy) 0%,#1a2f44 100%);padding:36px 24px 28px;text-align:center;color:var(--white);}
+.hero h1{font-family:'Playfair Display',serif;font-size:26px;margin-bottom:10px;line-height:1.3;}
+.hero h1 span{color:var(--gold-light);}
+.hero p{font-size:14px;color:rgba(255,255,255,.65);max-width:500px;margin:0 auto 16px;}
+.trust-strip{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;font-size:12px;color:rgba(255,255,255,.5);}
+.trust-strip span{display:flex;align-items:center;gap:5px;}
+.trust-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;}
+.container{width:100%;max-width:680px;padding:0 16px 60px;}
+.progress-wrap{padding:20px 0 8px;display:flex;align-items:center;gap:10px;}
+.progress-track{flex:1;height:3px;background:var(--border);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--gold);border-radius:99px;transition:width .5s ease;}
+.progress-label{font-size:11px;color:var(--muted);white-space:nowrap;}
+.chat-window{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;min-height:420px;}
+.chat-header{background:var(--navy);padding:14px 18px;display:flex;align-items:center;gap:12px;}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--navy);flex-shrink:0;}
+.chat-header-name{font-size:14px;font-weight:500;color:var(--white);}
+.chat-header-status{font-size:11px;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:5px;}
+.status-dot{width:6px;height:6px;background:#4CAF50;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.messages{flex:1;padding:20px 16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;max-height:380px;scroll-behavior:smooth;}
+.msg{display:flex;align-items:flex-end;gap:8px;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.bot{align-self:flex-start;}
+.msg.user{align-self:flex-end;flex-direction:row-reverse;}
+.msg-avatar{width:28px;height:28px;border-radius:50%;background:var(--gold);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--navy);}
+.msg-bubble{max-width:80%;padding:11px 15px;border-radius:16px;font-size:14px;line-height:1.55;}
+.msg.bot .msg-bubble{background:var(--bubble-bot);color:var(--navy);border-bottom-left-radius:4px;}
+.msg.user .msg-bubble{background:var(--navy);color:var(--white);border-bottom-right-radius:4px;font-size:13px;}
+.typing-indicator{display:none;align-items:flex-end;gap:8px;padding:4px 16px;}
+.typing-indicator.visible{display:flex;}
+.typing-dots{background:var(--bubble-bot);padding:12px 16px;border-radius:16px;border-bottom-left-radius:4px;display:flex;gap:4px;align-items:center;}
+.typing-dots span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:bounce 1.2s infinite;}
+.typing-dots span:nth-child(2){animation-delay:.15s}
+.typing-dots span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.quick-replies{padding:8px 16px 12px;display:flex;flex-wrap:wrap;gap:8px;}
+.qr-btn{background:var(--white);border:1.5px solid var(--navy);color:var(--navy);padding:8px 14px;border-radius:20px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;font-weight:500;}
+.qr-btn:hover{background:var(--navy);color:var(--white);}
+.section{display:none;animation:fadeUp .4s ease;}
+.section.active{display:block;}
+/* PAGO */
+.payment-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-top:16px;}
+.payment-header{background:var(--navy);padding:20px 24px;color:var(--white);}
+.payment-header h3{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:4px;}
+.payment-header p{font-size:13px;color:rgba(255,255,255,.6);}
+.payment-amount{font-size:38px;font-weight:700;color:var(--gold-light);font-family:'Playfair Display',serif;display:flex;align-items:baseline;gap:6px;margin:12px 0 0;}
+.payment-amount small{font-size:14px;font-weight:400;color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif;}
+.payment-body{padding:24px;}
+.what-includes{background:var(--success-light);border-radius:10px;padding:16px;margin-bottom:20px;}
+.what-includes h4{font-size:13px;color:var(--success);font-weight:500;margin-bottom:10px;}
+.include-item{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#1A4A32;margin-bottom:6px;}
+.include-item:last-child{margin-bottom:0;}
+.check{color:var(--success);font-weight:700;flex-shrink:0;}
+.method-tabs{display:flex;gap:8px;margin-bottom:20px;}
+.method-tab{flex:1;padding:10px;border:1.5px solid var(--border);border-radius:8px;text-align:center;cursor:pointer;font-size:12px;color:var(--muted);transition:all .2s;font-family:'DM Sans',sans-serif;}
+.method-tab.active{border-color:var(--navy);background:var(--navy);color:var(--white);font-weight:500;}
+.method-tab .method-icon{font-size:18px;display:block;margin-bottom:3px;}
+.transfer-info{background:#F7F5F0;border-radius:10px;padding:16px;margin-bottom:16px;}
+.transfer-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px;border-bottom:1px solid rgba(0,0,0,.06);}
+.transfer-row:last-child{border-bottom:none;}
+.tkey{color:var(--muted);}
+.tval{font-weight:500;color:var(--navy);display:flex;align-items:center;gap:6px;}
+.copy-btn{font-size:10px;padding:2px 7px;background:var(--navy);color:var(--white);border:none;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.copy-btn:hover{background:var(--gold);color:var(--navy);}
+.wompi-btn{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#C9A84C,#F0D78C);border:none;border-radius:10px;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--navy);cursor:pointer;margin-bottom:8px;transition:all .2s;}
+.wompi-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(201,168,76,.3);}
+.wompi-note{font-size:11px;color:var(--muted);text-align:center;}
+.file-drop{border:2px dashed var(--border);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:#FAFAF7;margin-bottom:12px;}
+.file-drop:hover{border-color:var(--navy);}
+.file-drop-icon{font-size:28px;margin-bottom:8px;display:block;}
+.file-drop p{font-size:13px;color:var(--muted);}
+.file-preview{display:none;background:var(--success-light);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--success);align-items:center;gap:8px;margin-bottom:12px;}
+.file-preview.show{display:flex;}
+.confirm-btn{width:100%;padding:16px;background:var(--gold);border:none;border-radius:12px;font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--navy);cursor:pointer;transition:all .2s;}
+.confirm-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+.confirm-btn:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;transform:none;}
+/* AGENDA */
+.schedule-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-top:16px;}
+.schedule-header{background:var(--success);padding:20px 24px;color:var(--white);text-align:center;}
+.schedule-header .big-check{font-size:40px;margin-bottom:8px;}
+.schedule-header h3{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:4px;}
+.schedule-header p{font-size:13px;color:rgba(255,255,255,.75);}
+.schedule-body{padding:24px;}
+.date-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;}
+.date-card{border:1.5px solid var(--border);border-radius:10px;padding:10px 6px;text-align:center;cursor:pointer;transition:all .2s;}
+.date-card:hover{border-color:var(--navy);}
+.date-card.selected{border-color:var(--navy);background:var(--navy);}
+.day-name{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.date-card.selected .day-name{color:rgba(255,255,255,.6);}
+.day-num{font-size:22px;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;line-height:1.2;}
+.date-card.selected .day-num{color:var(--gold-light);}
+.month-lbl{font-size:10px;color:var(--muted);}
+.date-card.selected .month-lbl{color:rgba(255,255,255,.5);}
+.time-grid{display:none;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
+.time-grid.visible{display:grid;}
+.time-slot{border:1.5px solid var(--border);border-radius:8px;padding:10px;text-align:center;cursor:pointer;font-size:13px;font-weight:500;color:var(--navy);transition:all .2s;}
+.time-slot:hover{border-color:var(--teal);color:var(--teal);}
+.time-slot.selected{background:var(--teal);border-color:var(--teal);color:var(--white);}
+.form-row{margin-bottom:14px;}
+.form-label{font-size:12px;color:var(--muted);margin-bottom:5px;display:block;}
+.form-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
+.form-input:focus{border-color:var(--navy);}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.schedule-btn{width:100%;padding:16px;background:var(--navy);border:none;border-radius:12px;font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--white);cursor:pointer;margin-top:8px;transition:all .2s;}
+.schedule-btn:hover{background:var(--teal);transform:translateY(-1px);}
+/* FINAL */
+.final-confirm{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:36px 28px;text-align:center;margin-top:16px;}
+.final-icon{font-size:56px;margin-bottom:16px;}
+.final-confirm h2{font-family:'Playfair Display',serif;font-size:24px;color:var(--navy);margin-bottom:10px;}
+.final-confirm p{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
+.meeting-summary{background:var(--navy);border-radius:12px;padding:20px;margin:20px 0;text-align:left;}
+.meeting-summary-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:13px;}
+.meeting-summary-row:last-child{border-bottom:none;}
+.mskey{color:rgba(255,255,255,.5);min-width:90px;}
+.msval{color:var(--gold-light);font-weight:500;}
+.next-steps{text-align:left;background:var(--cream);border-radius:10px;padding:16px;margin-top:16px;}
+.next-steps h4{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.ns-item{display:flex;gap:10px;font-size:13px;color:#2A2A3E;margin-bottom:8px;line-height:1.4;}
+.ns-num{background:var(--gold);color:var(--navy);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.notif{position:fixed;top:20px;right:20px;background:var(--navy);color:var(--white);padding:12px 18px;border-radius:10px;font-size:13px;display:none;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,.2);}
+.notif.show{display:block;animation:slideIn .3s ease;}
+@keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@media(max-width:540px){.form-row-2{grid-template-columns:1fr;}.date-grid{grid-template-columns:repeat(3,1fr);}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">DBE <span>Investment Trust</span></div>
+  <div class="header-badge">CONSULTORIA 1:1</div>
+</div>
+
+<div class="hero">
+  <h1>Sesion de consultoria<br><span>con Diego Bernal</span></h1>
+  <p>60 minutos para transformar tu situacion financiera. Diagnostico personalizado, estrategia clara y plan de accion real.</p>
+  <div class="trust-strip">
+    <span><span class="trust-dot"></span>Asesor certificado</span>
+    <span><span class="trust-dot"></span>100% confidencial</span>
+    <span><span class="trust-dot"></span>Google Meet incluido</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">Comenzando...</div>
+  </div>
+
+  <!-- SECCION CHAT -->
+  <div class="section active" id="sectionChat">
+    <div class="chat-window">
+      <div class="chat-header">
+        <div class="avatar">DB</div>
+        <div>
+          <div class="chat-header-name">Diego Bernal — DBE Investment Trust</div>
+          <div class="chat-header-status"><span class="status-dot"></span>En linea</div>
+        </div>
+      </div>
+      <div class="messages" id="messages"></div>
+      <div class="typing-indicator" id="typingIndicator">
+        <div class="msg-avatar">DB</div>
+        <div class="typing-dots"><span></span><span></span><span></span></div>
+      </div>
+      <div class="quick-replies" id="quickReplies"></div>
+    </div>
+  </div>
+
+  <!-- SECCION PAGO -->
+  <div class="section" id="sectionPayment">
+    <div class="payment-card">
+      <div class="payment-header">
+        <h3>Tu sesion de consultoria 1:1</h3>
+        <p>Diagnostico personalizado + Plan de portafolio</p>
+        <div class="payment-amount">$400.000 <small>COP / pago unico</small></div>
+      </div>
+      <div class="payment-body">
+        <div class="what-includes">
+          <h4>QUE INCLUYE TU SESION</h4>
+          <div class="include-item"><span class="check">&#10003;</span><span>Reunion 1:1 de 60 minutos por Google Meet</span></div>
+          <div class="include-item"><span class="check">&#10003;</span><span>Analisis personalizado de tu situacion financiera</span></div>
+          <div class="include-item"><span class="check">&#10003;</span><span>Plan de portafolio con activos especificos para tu perfil</span></div>
+          <div class="include-item"><span class="check">&#10003;</span><span>Seguimiento 7 dias despues de la sesion</span></div>
+        </div>
+
+        <h4 style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">ELIGE TU METODO DE PAGO</h4>
+        <div class="method-tabs">
+          <div class="method-tab active" id="tabNequi" onclick="selectMethod('nequi')">
+            <span class="method-icon">📱</span>Nequi
+          </div>
+          <div class="method-tab" id="tabBancolombia" onclick="selectMethod('bancolombia')">
+            <span class="method-icon">🏦</span>Bancolombia
+          </div>
+          <div class="method-tab" id="tabWompi" onclick="selectMethod('wompi')">
+            <span class="method-icon">💳</span>Wompi / Tarjeta
+          </div>
+        </div>
+
+        <div id="methodNequi">
+          <div class="transfer-info">
+            <div class="transfer-row"><span class="tkey">Numero Nequi</span><span class="tval">573011578156 <button class="copy-btn" onclick="copiar('573011578156')">Copiar</button></span></div>
+            <div class="transfer-row"><span class="tkey">Nombre</span><span class="tval">Diego Bernal Enriquez</span></div>
+            <div class="transfer-row"><span class="tkey">Valor</span><span class="tval" style="color:var(--gold);">$400.000 COP</span></div>
+          </div>
+        </div>
+
+        <div id="methodBancolombia" style="display:none;">
+          <div class="transfer-info">
+            <div class="transfer-row"><span class="tkey">Banco</span><span class="tval">Bancolombia</span></div>
+            <div class="transfer-row"><span class="tkey">Tipo de cuenta</span><span class="tval">Ahorros</span></div>
+            <div class="transfer-row"><span class="tkey">No. Cuenta</span><span class="tval">68814840984 <button class="copy-btn" onclick="copiar('68814840984')">Copiar</button></span></div>
+            <div class="transfer-row"><span class="tkey">Titular</span><span class="tval">Diego Bernal Enriquez</span></div>
+            <div class="transfer-row"><span class="tkey">Cedula</span><span class="tval">1000612176</span></div>
+            <div class="transfer-row"><span class="tkey">Valor</span><span class="tval" style="color:var(--gold);">$400.000 COP</span></div>
+          </div>
+        </div>
+
+        <div id="methodWompi" style="display:none;">
+          <button class="wompi-btn" onclick="window.open('https://checkout.wompi.co/l/SOXiPI','_blank')">
+            Pagar $400.000 con Wompi
+          </button>
+          <p class="wompi-note">Acepta debito, credito y PSE. Despues del pago vuelve aqui para subir tu comprobante.</p>
+        </div>
+
+        <div style="margin-top:20px;">
+          <h4 style="font-size:13px;color:var(--navy);margin-bottom:12px;font-weight:500;">Sube tu comprobante de pago</h4>
+          <div class="file-drop" onclick="document.getElementById('fileInput').click()">
+            <span class="file-drop-icon">📎</span>
+            <p>Toca aqui para subir tu comprobante</p>
+            <p style="font-size:11px;margin-top:4px;">JPG, PNG o PDF &middot; Max 5MB</p>
+          </div>
+          <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none" onchange="handleFile(this)">
+          <div class="file-preview" id="filePreview"><span>&#10003;</span><span id="fileName"></span></div>
+          <button class="confirm-btn" id="confirmPayBtn" disabled onclick="confirmarPago()">Confirmar pago y elegir fecha</button>
+          <p style="text-align:center;font-size:11px;color:var(--muted);margin-top:8px;">Tu informacion es 100% confidencial</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCION AGENDA -->
+  <div class="section" id="sectionSchedule">
+    <div class="schedule-card">
+      <div class="schedule-header">
+        <div class="big-check">&#10003;</div>
+        <h3>Pago confirmado</h3>
+        <p>Ahora elige el dia y hora de tu sesion</p>
+      </div>
+      <div class="schedule-body">
+        <p style="font-size:14px;color:var(--muted);margin-bottom:20px;">Todas las sesiones son por Google Meet, duran 60 minutos. Te llegara el link al correo automaticamente.</p>
+        <h4 style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">FECHAS DISPONIBLES</h4>
+        <div class="date-grid" id="dateGrid"></div>
+        <div class="time-grid" id="timeGrid"></div>
+        <div id="scheduleForm" style="display:none;">
+          <h4 style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;margin-top:4px;">TUS DATOS</h4>
+          <div class="form-row"><label class="form-label">Nombre completo</label><input type="text" class="form-input" id="schedName" placeholder="Tu nombre completo"></div>
+          <div class="form-row-2">
+            <div><label class="form-label">Correo electronico</label><input type="email" class="form-input" id="schedEmail" placeholder="tu@correo.com"></div>
+            <div><label class="form-label">WhatsApp</label><input type="tel" class="form-input" id="schedPhone" placeholder="300 000 0000"></div>
+          </div>
+          <div class="form-row" style="margin-top:14px;"><label class="form-label">Objetivo principal de tu sesion</label><textarea class="form-input" id="schedObjetivo" rows="2" placeholder="Ej: Quiero empezar a invertir con $500.000 mensuales y no se por donde"></textarea></div>
+          <button class="schedule-btn" onclick="finalizarAgendamiento()">Confirmar sesion y recibir link de Meet</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCION FINAL -->
+  <div class="section" id="sectionDone">
+    <div class="final-confirm">
+      <div class="final-icon">&#127881;</div>
+      <h2>Listo, <span id="clientFirstName">amigo</span>!</h2>
+      <p>Tu sesion esta confirmada. En los proximos minutos recibiras el link de Google Meet en tu correo.</p>
+      <div class="meeting-summary" id="meetingSummary"></div>
+      <div class="next-steps">
+        <h4>PROXIMOS PASOS</h4>
+        <div class="ns-item"><div class="ns-num">1</div><span>Revisa tu correo: llegara la invitacion de Google Meet con el link de la llamada.</span></div>
+        <div class="ns-item"><div class="ns-num">2</div><span>El dia de la reunion conectate 5 minutos antes. Ten a mano tus extractos bancarios y metas.</span></div>
+        <div class="ns-item"><div class="ns-num">3</div><span>Despues de la sesion recibiras un resumen con tu plan de accion personalizado.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<script>
+const APPS_URL='https://script.google.com/macros/s/AKfycbyq_ePrj-G2lEepCe3ARO8OMg6tYiqksXTr6aV_ywhjZ7lJeZTGUeVPAPMMcTzagsUW8w/exec';
+const clientData={};
+let scriptIndex=0,selectedDate=null,selectedTime=null;
+
+const SCRIPT=[
+  {id:'welcome',bot:'Hola! Soy el asistente de Diego Bernal en DBE Investment Trust.\n\nEn 5 preguntas rapidas entiendo tu situacion y te muestro exactamente como puede ayudarte una sesion 1:1. Empezamos?',type:'qr',options:['Claro, empecemos!','Cuentame mas primero'],progress:5},
+  {id:'q1',bot:'Cual es tu situacion financiera actual?',type:'qr',options:['Tengo ahorros sin invertir','Ya invierto pero quiero mejorar','Tengo excedentes de mi empresa','Empezando desde cero'],key:'situacion',progress:25},
+  {id:'q2',bot:'Cual es tu objetivo financiero principal en los proximos 2 anos?',type:'qr',options:['Invertir en finca raiz','Crecer mis ahorros en bolsa','Proteger mi patrimonio de la inflacion','Generar ingresos pasivos'],key:'objetivo',progress:45},
+  {id:'q3',bot:'Que tan comodo eres con el riesgo?',type:'qr',options:['Conservador — prefiero seguridad','Moderado — acepto algo de volatilidad','Agresivo — busco maximo retorno'],key:'riesgo',progress:65},
+  {id:'q4',bot:'Cual es tu mayor freno para invertir hoy?',type:'qr',options:['No se por donde empezar','Miedo a perder dinero','No confio en asesores','Falta de tiempo'],key:'freno',progress:85},
+  {id:'analysis',bot:null,type:'analysis',progress:100}
+];
+
+function fmt(t){return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}
+
+function addMsg(role,text){
+  return new Promise(r=>{
+    setTimeout(()=>{
+      const m=document.getElementById('messages');
+      const d=document.createElement('div');
+      d.className='msg '+role;
+      if(role==='bot'){
+        d.innerHTML='<div class="msg-avatar">DB</div><div class="msg-bubble">'+fmt(text)+'</div>';
+      } else {
+        d.innerHTML='<div class="msg-bubble">'+text+'</div><div class="msg-avatar" style="background:var(--teal);color:#fff;">TU</div>';
+      }
+      m.appendChild(d);
+      m.scrollTop=m.scrollHeight;
+      r();
+    },0);
+  });
+}
+
+function typing(ms=1200){
+  return new Promise(r=>{
+    const t=document.getElementById('typingIndicator');
+    t.classList.add('visible');
+    document.getElementById('messages').scrollTop=9999;
+    setTimeout(()=>{t.classList.remove('visible');r();},ms);
+  });
+}
+
+function setQR(opts){
+  const qr=document.getElementById('quickReplies');
+  qr.innerHTML='';
+  opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='qr-btn';b.textContent=o;
+    b.onclick=()=>handleReply(o);
+    qr.appendChild(b);
+  });
+}
+function clearQR(){document.getElementById('quickReplies').innerHTML='';}
+function setProgress(p,lbl){
+  document.getElementById('progressFill').style.width=p+'%';
+  document.getElementById('progressLabel').textContent=lbl||p+'% completado';
+}
+
+async function handleReply(choice){
+  clearQR();
+  const cur=SCRIPT[scriptIndex];
+  if(choice==='Cuentame mas primero'){
+    await addMsg('user',choice);
+    await typing(900);
+    await addMsg('bot','Diego Bernal es asesor de inversiones especializado en bolsa de valores y bienes raices.\n\nEn una sesion 1:1 de 60 minutos analizan juntos tu situacion, disenan tu portafolio y te da un plan real con activos concretos.\n\nTodo por $400.000 COP. Hacemos el diagnostico?');
+    setQR(['Si, empecemos!','Prefiero pensarlo']);
+    return;
+  }
+  if(choice==='Prefiero pensarlo'){
+    await addMsg('user',choice);
+    await typing(700);
+    await addMsg('bot','Sin problema. Cuando estes listo esta pagina sigue disponible. Tambien puedes contactar a Diego directamente al WhatsApp 573011578156.');
+    return;
+  }
+  await addMsg('user',choice);
+  if(cur.key) clientData[cur.key]=choice;
+  scriptIndex++;
+  if(scriptIndex<SCRIPT.length) await runStep(SCRIPT[scriptIndex]);
+}
+
+async function runStep(step){
+  if(step.id==='analysis'){
+    setProgress(100,'Analizando tu perfil...');
+    await typing(2000);
+    await generateAnalysis();
+    return;
+  }
+  await typing();
+  await addMsg('bot',step.bot);
+  setProgress(step.progress,'Paso '+scriptIndex+' de 4');
+  if(step.type==='qr') setQR(step.options);
+}
+
+async function generateAnalysis(){
+  const perfiles={
+    'Conservador — prefiero seguridad':'conservador',
+    'Moderado — acepto algo de volatilidad':'moderado',
+    'Agresivo — busco maximo retorno':'agresivo'
+  };
+  const retornos={
+    conservador:'9-13% anual combinando TES y fondos de renta fija',
+    moderado:'13-18% anual con acciones BVC y bienes raices',
+    agresivo:'18-25%+ anual con portafolio activo en renta variable'
+  };
+  const perfil=perfiles[clientData.riesgo]||'moderado';
+  clientData.perfil=perfil;
+  await addMsg('bot','Con base en tus respuestas tienes un perfil de inversionista **'+perfil+'**.\n\nUn portafolio bien estructurado puede generarte **'+retornos[perfil]+'** — muy por encima de lo que da un CDT tradicional.\n\nEn tu sesion con Diego disenan juntos el plan especifico para tu situacion, con activos concretos y una hoja de ruta para los proximos 12 meses.');
+  await typing(1500);
+  await addMsg('bot','La sesion cuesta **$400.000 COP**, dura 60 minutos por Google Meet y incluye seguimiento a los 7 dias. Agendamos ahora?');
+  setQR(['Si, quiero agendar mi sesion','Necesito pensarlo mas']);
+  document.getElementById('quickReplies').addEventListener('click',async e=>{
+    if(!e.target.classList.contains('qr-btn')) return;
+    const c=e.target.textContent;
+    clearQR();
+    await addMsg('user',c);
+    if(c.includes('agendar')){
+      await typing(700);
+      await addMsg('bot','Perfecto! Vamos al siguiente paso: el pago de tu sesion. Tan pronto lo confirmes agendamos de inmediato.');
+      setTimeout(()=>irAPago(),1200);
+    } else {
+      await typing(600);
+      await addMsg('bot','Sin problema. Cuando estes listo escribe al WhatsApp 573011578156 o vuelve aqui.');
+    }
+  },{once:true});
+}
+
+function irAPago(){
+  document.getElementById('sectionChat').classList.remove('active');
+  document.getElementById('sectionPayment').classList.add('active');
+  setProgress(100,'Diagnostico completo!');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// PAGO
+function selectMethod(m){
+  ['nequi','bancolombia','wompi'].forEach(x=>{
+    document.getElementById('method'+x.charAt(0).toUpperCase()+x.slice(1)).style.display='none';
+    document.getElementById('tab'+x.charAt(0).toUpperCase()+x.slice(1)).classList.remove('active');
+  });
+  document.getElementById('method'+m.charAt(0).toUpperCase()+m.slice(1)).style.display='block';
+  document.getElementById('tab'+m.charAt(0).toUpperCase()+m.slice(1)).classList.add('active');
+}
+
+function handleFile(input){
+  if(input.files&&input.files[0]){
+    document.getElementById('fileName').textContent=input.files[0].name;
+    document.getElementById('filePreview').classList.add('show');
+    document.getElementById('confirmPayBtn').disabled=false;
+  }
+}
+
+function confirmarPago(){
+  const btn=document.getElementById('confirmPayBtn');
+  btn.disabled=true;btn.textContent='Verificando pago...';
+  fetch(APPS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+    body:JSON.stringify({tipo:'COMPROBANTE_PAGO',nombre:clientData.nombre||'',email:clientData.email||'',
+      perfil:clientData.perfil||'',objetivo:clientData.objetivo||'',situacion:clientData.situacion||'',
+      fuente:'DBE Standalone',fecha_registro:new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'})})});
+  setTimeout(()=>{
+    mostrarNotif('Pago verificado exitosamente');
+    document.getElementById('sectionPayment').classList.remove('active');
+    document.getElementById('sectionSchedule').classList.add('active');
+    buildDateGrid();
+    window.scrollTo({top:0,behavior:'smooth'});
+  },2000);
+}
+
+// AGENDA
+function buildDateGrid(){
+  const grid=document.getElementById('dateGrid');grid.innerHTML='';
+  const DAYS=['Dom','Lun','Mar','Mie','Jue','Vie','Sab'];
+  const MONTHS=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const today=new Date();let count=0,i=2;
+  while(count<8){
+    const d=new Date(today);d.setDate(today.getDate()+i);
+    if(d.getDay()!==0){
+      const c=document.createElement('div');c.className='date-card';
+      c.innerHTML='<div class="day-name">'+DAYS[d.getDay()]+'</div><div class="day-num">'+d.getDate()+'</div><div class="month-lbl">'+MONTHS[d.getMonth()]+'</div>';
+      c.dataset.label=d.toLocaleDateString('es-CO',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+      c.dataset.iso=d.toISOString().split('T')[0];
+      c.onclick=()=>selectDate(c);
+      grid.appendChild(c);count++;
+    }
+    i++;
+  }
+}
+
+function selectDate(card){
+  document.querySelectorAll('.date-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedDate=card.dataset.label;
+  clientData.fechaISO=card.dataset.iso;
+  buildTimeSlots();
+  document.getElementById('timeGrid').classList.add('visible');
+}
+
+function buildTimeSlots(){
+  const grid=document.getElementById('timeGrid');grid.innerHTML='';
+  ['8:00 AM','9:00 AM','10:00 AM','11:00 AM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM'].forEach(t=>{
+    const s=document.createElement('div');s.className='time-slot';s.textContent=t;
+    s.onclick=()=>selectTime(s,t);
+    grid.appendChild(s);
+  });
+}
+
+function selectTime(slot,time){
+  document.querySelectorAll('.time-slot').forEach(s=>s.classList.remove('selected'));
+  slot.classList.add('selected');selectedTime=time;
+  document.getElementById('scheduleForm').style.display='block';
+  setTimeout(()=>document.getElementById('schedName').focus(),100);
+}
+
+function finalizarAgendamiento(){
+  const nombre=document.getElementById('schedName').value.trim();
+  const email=document.getElementById('schedEmail').value.trim();
+  const phone=document.getElementById('schedPhone').value.trim();
+  const objetivo=document.getElementById('schedObjetivo').value.trim();
+  if(!nombre||!email||!phone){mostrarNotif('Completa todos los campos');return;}
+  if(!selectedDate||!selectedTime){mostrarNotif('Selecciona fecha y hora');return;}
+  clientData.nombre=nombre;clientData.email=email;clientData.phone=phone;clientData.objetivo=objetivo;
+  fetch(APPS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+    body:JSON.stringify({tipo:'CLIENTE_CONFIRMADO',nombre,email,fecha_reunion:clientData.fechaISO,
+      hora_reunion:selectedTime,objetivo,perfil:clientData.perfil||'',situacion:clientData.situacion||'',
+      order_id:'DBE-SA-'+Date.now(),monto:'400000',moneda:'COP',
+      fuente:'DBE Standalone',fecha_registro:new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'})})});
+  mostrarNotif('Sesion confirmada! Enviando invitacion a tu correo...');
+  setTimeout(()=>mostrarFinal(nombre),2000);
+}
+
+function mostrarFinal(nombre){
+  document.getElementById('clientFirstName').textContent=nombre.split(' ')[0];
+  document.getElementById('meetingSummary').innerHTML=
+    '<div class="meeting-summary-row"><span class="mskey">Cliente</span><span class="msval">'+nombre+'</span></div>'+
+    '<div class="meeting-summary-row"><span class="mskey">Fecha</span><span class="msval">'+selectedDate+'</span></div>'+
+    '<div class="meeting-summary-row"><span class="mskey">Hora</span><span class="msval">'+selectedTime+' (Colombia)</span></div>'+
+    '<div class="meeting-summary-row"><span class="mskey">Formato</span><span class="msval">Google Meet &middot; 60 min &middot; link al correo</span></div>'+
+    '<div class="meeting-summary-row"><span class="mskey">Pago</span><span class="msval">&#10003; $400.000 COP confirmado</span></div>';
+  document.getElementById('sectionSchedule').classList.remove('active');
+  document.getElementById('sectionDone').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function copiar(txt){navigator.clipboard.writeText(txt).then(()=>mostrarNotif('Copiado!'));}
+function mostrarNotif(msg){
+  const n=document.getElementById('notif');n.textContent=msg;n.classList.add('show');
+  setTimeout(()=>n.classList.remove('show'),3000);
+}
+
+// ARRANQUE
+(async()=>{
+  await new Promise(r=>setTimeout(r,600));
+  await runStep(SCRIPT[0]);
+})();
+</script>
+</body>
+</html>
